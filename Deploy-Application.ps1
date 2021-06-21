@@ -65,15 +65,15 @@ Try {
 	##* VARIABLE DECLARATION
 	##*===============================================
 	## Variables: Application
-	[string]$appVendor = ''
-	[string]$appName = ''
+	[string]$appVendor = 'Microsoft'
+	[string]$appName = 'Windows Performance Toolkit'
 	[string]$appVersion = ''
-	[string]$appArch = ''
+	[string]$appArch = 'x64'
 	[string]$appLang = 'EN'
 	[string]$appRevision = '01'
 	[string]$appScriptVersion = '1.0.0'
-	[string]$appScriptDate = 'XX/XX/202X'
-	[string]$appScriptAuthor = '<author name>'
+	[string]$appScriptDate = '06/21/2021'
+	[string]$appScriptAuthor = 'James Hardy'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
 	[string]$installName = ''
@@ -121,7 +121,7 @@ Try {
 		[string]$installPhase = 'Pre-Installation'
 
 		## Show Welcome Message, close Internet Explorer if required, verify there is enough disk space to complete the install, and persist the prompt
-		Show-InstallationWelcome -CloseApps 'iexplore' -CheckDiskSpace -PersistPrompt
+		Show-InstallationWelcome -CloseApps '' -CheckDiskSpace -PersistPrompt
 
 		## Show Progress Message (with the default message)
 		Show-InstallationProgress
@@ -141,6 +141,8 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
+		$exitCode = Execute-MSI -Path "$dirFiles\wptx64-x86_en-us.msi" -Action Install -PassThru
+        If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 
 		##*===============================================
@@ -181,6 +183,8 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
+		$exitCode = Execute-MSI -Path "$dirFiles\wptx64-x86_en-us.msi" -Action Uninstall -PassThru
+        If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 
 		##*===============================================
